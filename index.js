@@ -12,11 +12,12 @@ const STORE = [
     question: 'Who was named Beercules?',
     answers: ['Ted', 'Barney', 'Marshall', 'Lily', 'Punchy'],
     correctAnswer: 'Marshall',
-    correctImg: 'https://i.imgur.com/aRzHcQZ.gif',
+    correctImg: 'https://media.giphy.com/media/1MpoE8YEebJQI/giphy.gif',
   }, {
     question: 'Who was Lilys’ doppelganger?',
     answers: ['Mustache Lily', 'Street Performer Lily', 'Lily the Wrestler', 'Stripper Lily', 'Teacher Lily'],
     correctAnswer: 'Stripper Lily',
+    correctImg: 'https://66.media.tumblr.com/6edf3866a27ef97995da84287ecc6450/tumblr_mucx1iLX5U1qgmlszo3_250.gif',
   }, {
     question: 'What’s Barneys’ job?',
     answers: ['Please', 'Has a lot of keys', 'Stock Investor', 'Lawyer', 'Architech'],
@@ -72,8 +73,9 @@ function createQuestion(){ //update questions and answers
       `;
   }
   else {
+    console.log('the end');
     endResult();
-    $('.question-number').text(5);
+    $('.question-number').text(currentQCount + 1);
   }
 }
 
@@ -87,7 +89,8 @@ function changeScore(){
 }
 
 function startQuiz () {
-  $('.start').on('click', function (event){
+  $('.start').on('click', function (){
+    console.log('start function firing');
     $('.start').remove();
     $('.question-number').text(1);
     renderQuestion();
@@ -114,17 +117,6 @@ function userInput () {
     renderNextQuestion();
   });
 }
-
-/*function ifAnswerIsCorrect () {
-    correctFeedback();
-    updateScore();
-    
-}
-
-function ifAnswerIsWrong () {
-    wrongFeedback();
-}
-*/
 
 
 function correctFeedback(){
@@ -156,20 +148,69 @@ function updateScore(){
   $('.score').text(score);
 }
 
+/////////////////// added 8/29/19 ////////////////////////////////
 function endResult(){
-    $('.quiz').html(`<p>end of quiz`)
+  $('.status').css('display', 'none');
+
+  if(score >= 3){
+    console.log('Not bad');
+    $('main').html(`  
+    <p>THE END</p>
+    <p>You got ${score}/5</p>
+    <p>'Not bad'</p>
+    <button class="restart">Restart</button>
+    
+  `);
+  } 
+  if(score < 3){
+    console.log('you might want to rewatch some episodes');
+    $('main').html(`  
+    <p>THE END</p>
+    <p>You got ${score}/5</p>
+    <p>you might want to rewatch some episodes</p>
+    <button class="restart">Restart</button>
+   
+  `);
+  } 
+  if (score === 5) {
+    console.log('You are legen - wait for it - dary');
+    $('main').html(`  
+    <p>THE END</p> 
+    <p>You got ${score}/5</p>
+    <p>You are legen - wait for it - dary</p>
+    <button class="restart">Restart</button>
+  `);
+  }
+  currentQCount = 0; 
+  score = 0;
+  
+}
+///////////////////////////////////////////////////////////////////////
+
+function restart(){
+  $('main').on('click', '.restart', function() {
+    console.log('restart clicked');
+
+    $('.status').css('display', 'block');
+    renderQuestion();
+    
+
+  });
 }
 
+
 function renderNextQuestion(){
-  $('main').on('click', '.nextButton', function (event) {
+  $('.nextButton').on('click', function () {
     changeCurrentQCount();
     renderQuestion();
-  })
+
+  });
 }
 
 function createQuiz(){
-    startQuiz();
-    userInput (); 
+  startQuiz();
+  userInput (); 
+  restart();
     
 }
 
